@@ -180,7 +180,7 @@ public final class MisionSeisSketch {
   else{dibujarInfluencer(g);dibujarJuanPlaza(g,jx,jy,discurso);}
   if(game.fase==MisionSeisMotor.Fase.CAMINAR){
    String nombre=game.jugadorX<470?"JUAN":game.jugadorX<650?"INFLUENCER":"JUAN";
-   String comentario=game.jugadorX<470?"Quiero que esta campaña vuelva a escuchar al barrio.":game.jugadorX<650?"Después del Núcleo Viral, verificar importa más que nunca.":"La casa está cerca. Allí responderé todas tus preguntas.";
+   String comentario=game.jugadorX<470?"Quiero que esta campaña vuelva a escuchar al barrio.":game.jugadorX<650?"Después del plan del Palomo, verificar importa más que nunca.":"La casa está cerca. Allí responderé todas tus preguntas.";
    float bx=Math.max(20,Math.min(690,(game.jugadorX+game.juanX)/2-135));float by=Math.max(90,Math.min(game.jugadorY,game.juanY)-124);
    panel(g,bx,by,310,57);texto(g,nombre,bx+13,by+17,12,0xfff4cb6a);parrafo(g,comentario,bx+13,by+21,285,13,0xfff5e8fb);
   }
@@ -305,6 +305,6 @@ public final class MisionSeisSketch {
   escenaSofa(g);String s=game.ruta()==MisionSeisMotor.Ruta.ESCUCHA?
    "JUAN: Gobernar es escuchar, ajustar y construir con la gente. Las propuestas deben crecer con la ciudad.":
    "JUAN: Gobernar también exige sostener ideas firmes y explicarlas con valentía. Escuchar no significa renunciar al rumbo.";
-  cuadroDialogo(g,"JUAN",(game.ruta()==MisionSeisMotor.Ruta.ESCUCHA?"ESCUCHAR Y ADAPTAR. ":"CONVICCIÓN Y DIÁLOGO. ")+s.replace("JUAN: ","")+"  INFLUENCER: Una ciudad no se salva solo peleando contra el caos. También se salva decidiendo qué hacer cuando baja el ruido.","ENTER · volver al selector");
+  cuadroDialogo(g,"JUAN",(game.ruta()==MisionSeisMotor.Ruta.ESCUCHA?"ESCUCHAR Y ADAPTAR. ":"CONVICCIÓN Y DIÁLOGO. ")+s.replace("JUAN: ","")+"  INFLUENCER: Una ciudad no se salva solo peleando contra el caos. También se salva decidiendo qué hacer cuando baja el ruido.","ENTER · continuar");
  }
 }

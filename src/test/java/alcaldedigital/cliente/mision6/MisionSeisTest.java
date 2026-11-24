@@ -4,13 +4,10 @@ import org.junit.jupiter.api.io.TempDir;
 import static org.junit.jupiter.api.Assertions.*;
 import java.awt.event.KeyEvent;
 import java.nio.file.*;
-import alcaldedigital.cliente.ClienteSketch;
-import alcaldedigital.cliente.entrada.MapaControles;
-import alcaldedigital.cliente.entrada.EstadoMando;
 import alcaldedigital.cliente.JuegoCliente;
+import alcaldedigital.cliente.campana.Campana;
 import alcaldedigital.cliente.interfaz.RenderJuego;
 import alcaldedigital.servidor.sesion.SesionLocal;
-import alcaldedigital.servidor.sesion.SesionMisionUnoLocal;
 import static alcaldedigital.cliente.mision6.MisionSeisMotor.*;
 
 class MisionSeisTest {
@@ -24,16 +21,16 @@ class MisionSeisTest {
   assertEquals(Fase.ENTRENAMIENTO,m.fase);m.pulsar(KeyEvent.VK_ENTER);assertEquals(Fase.COMBATE,m.fase);return m;
  }
  @Test void selectorYPausaEscape(){
-  var j=new JuegoCliente(SesionLocal::new,SesionMisionUnoLocal::new);alcaldedigital.pruebas.PartidaPrueba.elegir(j,6);assertEquals(JuegoCliente.Pantalla.MENU,j.pantalla);
-  alcaldedigital.pruebas.PartidaPrueba.desbloquear(j);j.accion("jugar");var r=new RenderJuego();r.dibujar(j);var b=r.botones().stream().filter(x->x.accion().equals("mision6")).findFirst().orElseThrow();
-  r.pulsar(j,b.area().x+5,b.area().y+5);assertEquals(JuegoCliente.Pantalla.MISION_SEIS,j.pantalla);assertTrue(j.misionEmbebida());
-  String old=System.getProperty("ad.guardados");System.setProperty("ad.guardados",temporal.toString());
-  try(var vista=new alcaldedigital.cliente.misiones.VistaCampana(6,j)){
-   vista.iniciarEn(null);vista.pulsar((char)27,27);assertTrue(j.pausa);
-   vista.pulsar((char)27,27);assertTrue(j.pausa,"Una tecla mantenida no reanuda");
-   vista.soltar(27);vista.pulsar((char)27,27);assertFalse(j.pausa);
-  }finally{if(old==null)System.clearProperty("ad.guardados");else System.setProperty("ad.guardados",old);}
-  j.terminarMisionSeis(new Resultado(false,Modo.SOLO,Ruta.ESCUCHA,5,-1));assertEquals(JuegoCliente.Pantalla.MISIONES,j.pantalla);
+  var j=new JuegoCliente(SesionLocal::new,new Campana(temporal.resolve("campana.properties")));var r=new RenderJuego();
+  j.accion("mision6");assertEquals(JuegoCliente.Pantalla.MENU,j.pantalla,"Sin ganar la misión 5 sigue bloqueada");
+  j.campana.victoriaLibreM5();r.dibujar(j);var b=r.botones().stream().filter(x->x.accion().equals("mision6")).findFirst().orElseThrow();
+  r.pulsar(j,b.area().x+5,b.area().y+5);assertEquals(JuegoCliente.Pantalla.MISION6,j.pantalla);assertNotNull(j.seis);
+  j.tecla(27,(char)27);assertEquals(JuegoCliente.Pantalla.MISION6_PAUSA,j.pantalla,"Esc pausa");
+  float global=j.seis.motor().global;j.actualizar(1);assertEquals(global,j.seis.motor().global,"En pausa la misión no avanza");
+  j.tecla(27,(char)27);assertEquals(JuegoCliente.Pantalla.MISION6,j.pantalla,"Esc reanuda");
+  j.tecla(KeyEvent.VK_P,'p');assertEquals(JuegoCliente.Pantalla.MISION6_PAUSA,j.pantalla,"P también pausa");
+  j.accion("salir6");assertEquals(JuegoCliente.Pantalla.MENU,j.pantalla);assertNull(j.seis);
+  j.terminarMision6(new Resultado(false,Modo.SOLO,Ruta.ESCUCHA,5,-1));assertEquals(JuegoCliente.Pantalla.MENU,j.pantalla);
  }
  @Test void campanaHablaConJuanYCaminaHastaElHelicoptero(){
   var m=new MisionSeisMotor();assertEquals(Fase.DISCURSO,m.fase);
@@ -72,15 +69,10 @@ class MisionSeisTest {
  }
  @Test void controlesGlobalesSeparanMisilDeGuardarYMovilidadDeAmbosJugadores(){
   var m=combate(Modo.DUO);m.energia=120;
-  m.pulsar(KeyEvent.VK_G);assertTrue(m.proyectiles.stream().noneMatch(p->p.especial),"G queda reservada para guardar");
-  var secundaria=MapaControles.accionTeclado(6,true,KeyEvent.VK_Q);
-  assertEquals(MapaControles.Accion.SECUNDARIA,secundaria);
-  assertEquals(secundaria,MapaControles.accionMando(EstadoMando.Boton.Y));
-  m.pulsar(MapaControles.codigoInterno(6,true,secundaria));
-  assertTrue(m.proyectiles.stream().anyMatch(p->p.dueno==0&&p.especial));
+  m.pulsar(KeyEvent.VK_G);assertTrue(m.proyectiles.stream().noneMatch(p->p.especial),"G no dispara misiles");
+  m.pulsar(KeyEvent.VK_Q);assertTrue(m.proyectiles.stream().anyMatch(p->p.dueno==0&&p.especial),"Q: misil de J1");
   m.pulsar(KeyEvent.VK_SPACE);assertTrue(m.naves[0].impulso>0);
   m.pulsar(KeyEvent.VK_SHIFT);assertTrue(m.naves[1].impulso>0);
-  assertEquals(KeyEvent.VK_Q,MapaControles.codigoInterno(6,true,secundaria));
  }
  @Test void interferenciaSeRompeYAmbasEntrevistasSonValidas(){
   for(int decision=0;decision<2;decision++){

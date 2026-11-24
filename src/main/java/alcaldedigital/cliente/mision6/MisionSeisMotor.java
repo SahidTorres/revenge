@@ -17,15 +17,15 @@ public final class MisionSeisMotor {
   "VECINA: ¡Queremos una campaña que también escuche al barrio!",
   "JUAN: Tienen mi palabra. Una promesa solo vale si podemos mirarnos a los ojos y responder por ella."};
  public static final String[] INTRO={
-  "INFLUENCER: Juan, vi tu discurso. Después del Núcleo Viral quería saber qué viene para la ciudad.",
-  "JUAN: Tú enfrentaste una amenaza invisible. Yo acabo de cruzar una campaña llena de rumores.",
+  "INFLUENCER: Juan, vi tu discurso. Me llegó el mensaje de la periodista: el Palomo te tiene en la mira con un dron.",
+  "JUAN: Ese pájaro lleva toda la semana llenando Civitas de rumores. No voy a cancelar la entrevista por miedo.",
   "INFLUENCER: Entonces tenemos algo en común. Traje preguntas, pero también quiero escuchar a la gente.",
   "JUAN: Vamos a la casa de campaña. Por el camino te cuento mis propuestas sin filtros.",
   "INFLUENCER: Trato hecho. Pero si ese helicóptero se cae, quiero dejar claro que la idea fue tuya."};
  public static final String[] ADVERTENCIA={
   "INFLUENCER: Cuando una ciudad entera te mira, cada palabra pesa. Tal vez este vuelo sea una prueba.",
   "DRON VIRAL: ¡SEÑAL SATURADA! ¡CAMPAÑA DETECTADA! ¡OBJETIVO: CAOS!",
-  "INFLUENCER: Es un dron de vigilancia infectado por la señal residual del Núcleo Viral. Disparemos a su enlace para cortar el control.",
+  "INFLUENCER: ¡Es el Dron Viral del Palomo, el de la transmisión pirata! Disparemos a su enlace para cortar el control.",
   "JUAN: Primero practicamos las maniobras. Después rompemos esa interferencia y seguimos a la casa de campaña."};
  public static final String[] PREGUNTAS={
   "¿Qué pesa más: lo que la gente pide hoy o lo que crees que necesita mañana?",

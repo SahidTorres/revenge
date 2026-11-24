@@ -14,7 +14,7 @@ public final class AutoguardadoSeis implements AutoCloseable {
  public AutoguardadoSeis(Path archivo){this.archivo=archivo.toAbsolutePath();this.respaldo=this.archivo.resolveSibling(this.archivo.getFileName()+".bak");}
  public static Path ubicacion(){
   String override=System.getProperty("ad.mision6.guardar");if(override!=null&&!override.isBlank())return Path.of(override);
-  return alcaldedigital.servidor.batalla.GuardadoBatalla.directorio().resolve("mision6.properties");
+  return alcaldedigital.compartido.guardado.ArchivosPartida.directorio().resolve("mision6.properties");
  }
  private Properties leer(Path p){
   if(!Files.isRegularFile(p))return null;try(var in=Files.newInputStream(p)){Properties v=new Properties();v.load(in);return MisionSeisMotor.restaurar(v)==null?null:v;}catch(IOException|RuntimeException ex){return null;}
